@@ -454,11 +454,11 @@ Resources:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !Ref FargateAlbSG
-      DestinationSecurityGroupId: !GetAtt FargateAlbSG.GroupId
+      CidrIp: 0.0.0.0/0
       FromPort: 0
-      ToPort: 0
+      ToPort: 65535
       IpProtocol: TCP
-      Description: 'Outbound rule to communication within the SG'
+      Description: 'Outbound rule to communication with the target group'
   TargetGroupSG:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:

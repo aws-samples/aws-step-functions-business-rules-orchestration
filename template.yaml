@@ -140,6 +140,17 @@ Resources:
                 Action:
                   - "lambda:InvokeFunction"
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogDelivery
+                  - logs:GetLogDelivery
+                  - logs:UpdateLogDelivery
+                  - logs:DeleteLogDelivery
+                  - logs:ListLogDeliveries
+                  - logs:PutResourcePolicy
+                  - logs:DescribeResourcePolicies
+                  - logs:DescribeLogGroups
+                Resource: "*"
   
   RuleStateMachineLogGroup:
     Type: AWS::Logs::LogGroup
@@ -439,7 +450,7 @@ Resources:
           ToPort: 80
           IpProtocol: TCP
           Description: 'Inbound rule for IPv4 traffic'
-  FargateAlbSGEgress:
+  FargateAlbSGEgress1:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !Ref FargateAlbSG
@@ -460,15 +471,24 @@ Resources:
           ToPort: 8080
           IpProtocol: TCP
           Description: 'Inbound rule for ECS traffic'
-  TargetGroupSGEgress:
+  TargetGroupSGEgress1:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !Ref TargetGroupSG
-      DestinationSecurityGroupId: !GetAtt TargetGroupSG.GroupId
-      FromPort: 0
-      ToPort: 0
+      CidrIp: 0.0.0.0/0
+      FromPort: 443
+      ToPort: 443
       IpProtocol: TCP
-      Description: 'Outbound rule to communication within the SG'
+      Description: 'Outbound rule to communication with ECR'
+  TargetGroupSGEgress2:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref TargetGroupSG
+      CidrIp: 0.0.0.0/0
+      FromPort: 53
+      ToPort: 53
+      IpProtocol: UDP
+      Description: 'Outbound rule to communication with ECR'
   MyECSService:
     Type: AWS::ECS::Service
     DependsOn:

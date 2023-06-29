@@ -42,17 +42,17 @@ Deploy the business rules springboot application:
 
  1. git clone the repository
  
- 2. Build the spring boot drools java application 
+ 2.  Build the sprint boot application and docker image ( pre-requisite docker should be installed and started )
         cd drools-spring-boot
-        mvn clean install
+        mvn clean package
+   
+ 3. Tag the image as latest
+    docker tag drools-rule-app:0.0.1-SNAPSHOT drools-rule-app:latest
 
- 2. Build the docker image ( pre-requisite docker should be installed and started )
-    mvn docker:build
-
- 3. Create the ECR private repository which will host our docker image
+ 4. Create the ECR private repository which will host our docker image
     aws ecr create-repository --repository-name drools_private_repo --image-tag-mutability MUTABLE --image-scanning-configuration scanOnPush=false
 
- 4. Push the docker image to ECR repository and tag the same 
+ 5. Push the docker image to ECR repository and tag the same 
     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ##########.dkr.ecr.us-east-1.amazonaws.com
     docker tag drools-rule-app:latest  ##########.dkr.ecr.us-east-1.amazonaws.com/drools_private_repo:latest    
     docker push ##########.dkr.ecr.us-east-1.amazonaws.com/drools_private_repo:latest

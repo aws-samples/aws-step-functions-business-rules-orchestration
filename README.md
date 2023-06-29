@@ -42,13 +42,10 @@ Deploy the business rules springboot application:
 
  1. git clone the repository
  
- 2. Build the spring boot drools java application 
+ 2.  Build the sprint boot application and docker image ( pre-requisite docker should be installed and started )
         cd drools-spring-boot
         mvn clean package
-
- 2. Build the docker image ( pre-requisite docker should be installed and started )
-    mvn docker:build
-    
+   
  3. Tag the image as latest
     docker tag drools-rule-app:0.0.1-SNAPSHOT drools-rule-app:latest
 
